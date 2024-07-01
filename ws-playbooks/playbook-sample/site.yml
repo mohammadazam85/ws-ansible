@@ -1,0 +1,9 @@
+---
+#comments
+- name: My sample playkook
+  hosts: localhost
+  gather_facts: yes
+  become: yes
+  tasks:
+  roles: 
+    - role: sample

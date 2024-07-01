@@ -1,0 +1,5 @@
+---
+# tasks file for install_soe_packages
+- name: Install EPEL extra packages
+  yum:
+    name: epel-release

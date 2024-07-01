@@ -1,0 +1,13 @@
+---
+# tasks file for install_docker_compose
+- name: Copy docker-compose
+  copy:
+    src: docker-compose
+    dest: /usr/local/bin/docker-compose
+    mode: "0755"
+- name: verify the docker-compose installation
+  shell: |
+    docker-compose -v
+  register: docker_compose_version
+- debug:
+    var: docker_compose_version.stdout

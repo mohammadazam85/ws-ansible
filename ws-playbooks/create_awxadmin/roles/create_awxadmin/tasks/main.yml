@@ -1,0 +1,26 @@
+---
+# tasks file for install_awxadmin
+- name: create group awxadmin
+  group:
+    name: awxadmin
+    gid: "{{user_group_id}}"
+    local: no
+    state: present
+- name: create group awxadmin
+  user:
+    name: awxadmin
+    uid: "{{user_group_id}}"
+    local: no
+    create_home: yes
+    home: /usr/home/awxadmin
+    generate_ssh_key: yes
+    ssh_key_type: rsa
+    state: present
+- name: create sudoers file
+  copy:
+    src: "{{item.file}}"
+    dest: "{{item.location}}"
+    mode: "{{item.mode}}"
+  with_items:
+    - { file: "00_awxadmin", location: "/etc/sudoers.d/", mode: "0440" }
+ #   - { file: "authorized_keys", location: "/usr/home/awxadmin/.ssh", mode: "755" }

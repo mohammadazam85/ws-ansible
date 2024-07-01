@@ -1,0 +1,8 @@
+---
+- name: Installing docker-compose
+  hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+    roles: 
+        - role: install_docker_compose

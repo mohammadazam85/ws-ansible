@@ -1,0 +1,8 @@
+---
+- name: Installing git server
+  hosts: all
+  gather_facts: yes
+  become: yes
+  tasks:
+  roles: 
+    - role: install_git_server

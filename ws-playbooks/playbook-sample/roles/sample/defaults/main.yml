@@ -1,0 +1,10 @@
+---
+# defaults file for sample
+host_os: "{{ansible_distribution}}"
+host_os_type: "{{ansible_distribution_file_variety}}"
+host_major_version: "{{ansible_distribution_major_version}}"
+host_os_version: "{{ansible_distribution_version}}"
+host_ipv4_address: "{{ansible_default_ipv4.address}}"
+host_ipv4_gateway: "{{ansible_default_ipv4.gateway}}"
+host_hostname: "{{ansible_hostname}}"
+host_fqdn: "{{ansible_fqdn}}"

@@ -1,0 +1,28 @@
+---
+# tasks file for sample
+- name: Show my name
+  debug:
+    msg: 
+      - "{{host_os}}"
+      - "{{host_os_type}}"
+      - "{{host_major_version}}"
+      - "{{host_os_version}}"
+      - "{{host_ipv4_address}}"
+      - "{{host_ipv4_gateway}}"
+      - "{{host_hostname}}"
+      - "{{host_fqdn}}"
+  when: host_major_version|int >= 7
+- name: Create git user and group
+  block:
+  - name: Ensure group "awxgit" exists else create
+    group:
+      name: awxgit
+      state: present
+  - name: Ensure user "awxgit" exists else create
+    user:
+      name: awxgit
+      group: awxgit
+      create_home: yes
+      generate_ssh_key: yes
+      state: present
+  when: false

@@ -1,0 +1,3 @@
+---
+# vars file for install_awxadmin
+user_group_id: 1099

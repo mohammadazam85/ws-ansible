@@ -1,0 +1,66 @@
+---
+- name: Checking the OS Major version 
+  meta: end_host
+  when:
+    - host_major_version|int < 7
+
+- name: Installing necessary dependencies
+  yum:
+    name:
+      - epel-release
+      - dh-autoreconf
+      - curl-devel
+      - expat-devel
+      - gettext-devel
+      - openssl-devel
+      - perl-devel
+      - zlib-devel
+      - asciidoc
+      - xmlto
+      - docbook2X
+    state: present
+- name: create directory /apps/platform-tools
+  file:
+    path: "{{item}}"
+    state: directory
+    mode: '0755'
+  with_items:
+    - "/apps/platform-tools/"
+    - "/apps/platform-tools/{{git_version}}/usr"
+    - "/apps/repositories/git_repo.git"
+
+- name: Unarchive
+  unarchive:
+    src: "{{git_version}}.tar.gz"
+    dest: /apps/platform-tools
+    mode: '0755'
+
+- name: update Documentation/Makefile
+  lineinfile:
+    path: /apps/platform-tools/{{git_version}}/Documentation/Makefile
+    regexp: '^DOCBOOK2X_TEXI ='
+    line: "DOCBOOK2X_TEXI = db2x_docbook2texi"
+
+- name: Make, Configure and Installing
+  block:
+    - name: make configure
+      shell: |
+        cd /apps/platform-tools/{{git_version}}/
+        ./configure --prefix=/apps/platform-tools/{{git_version}}/usr
+        make all doc info
+        make install install-doc install-html install-info
+      register: install_status
+  rescue:
+    - debug:
+        msg: "git installation failed! {{install_status}}"
+- name: create and initialize git repo
+  block:
+    - name: creating and initialing git repo
+      shell: |
+        cd /apps/repositories/git_repo.git
+        git init --bare
+      register: repo_status
+  rescue:
+    - debug:
+        msg: "git repo creating or initialization failed!"
+  when: install_status.rc == 0

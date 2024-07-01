@@ -1,0 +1,5 @@
+---
+# vars file for install_docker
+docker_release: docker-ce-19.03.5-3.el7.x86_64
+containerd_io: containerd.io-1.2.10-3.2.el7.x86_64
+docker_cli: docker-ce-cli-19.03.5-3.el7.x86_64

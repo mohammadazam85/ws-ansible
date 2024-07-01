@@ -1,0 +1,30 @@
+---
+# tasks file for install_docker
+- name: Copy the docker rpm package on remote
+  copy:
+    src: "{{item}}.rpm"
+    dest: /apps/packages/
+    mode: '0755'
+  with_items:
+    - "{{docker_release}}"
+    - "{{containerd_io}}"
+    - "{{docker_cli}}"
+- name: yum install docker ce
+  yum:
+    name: 
+      - "/apps/packages/{{containerd_io}}.rpm"
+      - "/apps/packages/{{docker_cli}}.rpm"
+      - "/apps/packages/{{docker_release}}.rpm"
+    state: present
+    disable_gpg_check: yes
+- name: start docker service
+  service:
+    name: docker
+    enabled: yes
+    state: started
+- name: validating the docker installation
+  shell: |
+    docker -v
+  register: docker_version
+- debug:
+    var: docker_version.stdout
